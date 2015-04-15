@@ -17,13 +17,13 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
-		big.setBackground(Color.BLACK);
+		big.setBackground(Color.ORANGE);
 	}
 
 	public void updateGameUI(GameReporter reporter){
 		big.clearRect(0, 0, 400, 600);
 		
-		big.setColor(Color.PINK);		
+		big.setColor(Color.BLACK);		
 		big.drawString(String.format("%04d", reporter.getScore()), 300, 20);
 		for(Sprite s : sprites){
 			s.draw(big);
