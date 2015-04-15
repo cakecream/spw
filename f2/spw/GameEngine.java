@@ -28,7 +28,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		gp.sprites.add(v);
 		
-		timer = new Timer(45, new ActionListener() {
+		timer = new Timer(60, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -86,13 +86,22 @@ public class GameEngine implements KeyListener, GameReporter{
 	void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			v.move(-1);
+			v.moveLR(-1);
 			break;
 		case KeyEvent.VK_RIGHT:
-			v.move(1);
+			v.moveLR(1);
+			break;
+		case KeyEvent.VK_UP:
+			v.moveUD(-1);
+			break;
+		case KeyEvent.VK_DOWN:
+			v.moveUD(1);
 			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
+			break;
+		case KeyEvent.VK_R:
+			score = 0;
 			break;
 		}
 	}
