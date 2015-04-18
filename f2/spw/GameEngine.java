@@ -15,12 +15,13 @@ public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
+	private ArrayList<Candy> candy = new ArrayList<Candy>();	
 	private SpaceShip v;	
 	
 	private Timer timer;
 	
 	private long score = 0;
-	private double difficulty = 0.2;
+	private double difficulty = 0.05;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -48,12 +49,19 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
+	private void generateCandy(){
+		Candy c = new Candy((int)(Math.random()*390), 30);
+		gp.sprites.add(c);
+		candy.add(c);
+	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
-		
+		if(Math.random() < 0.1){
+			generateCandy();
+		}
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
@@ -65,7 +73,16 @@ public class GameEngine implements KeyListener, GameReporter{
 				score += 3000;
 			}
 		}
-		
+		Iterator<Candy> c_iter = candy.iterator();
+		while(c_iter.hasNext()){
+			Candy c = c_iter.next();
+			c.proceed();
+			
+			if(!c.isAlive()){
+				c_iter.remove();
+				gp.sprites.remove(c);
+			}
+		}
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
@@ -77,6 +94,17 @@ public class GameEngine implements KeyListener, GameReporter{
 				return;
 			}
 		}
+		
+		Rectangle2D.Double cr;
+		for(Candy c : candy){
+			cr = c.getRectangle();
+			if(cr.intersects(vr)){
+				score += 5000;
+				c.notAlive();
+				return;
+			}
+		}
+	
 	}
 	
 	public void die(){
