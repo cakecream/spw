@@ -15,7 +15,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
-	private ArrayList<Candy> candy = new ArrayList<Candy>();	
+	private ArrayList<Candy> candy = new ArrayList<Candy>();
+	private ArrayList<Chocco> chocco = new ArrayList<Chocco>();
 	private SpaceShip v;	
 	
 	private Timer timer;
@@ -54,6 +55,11 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(c);
 		candy.add(c);
 	}
+	private void generateChocco(){
+		Chocco ch = new Chocco((int)(Math.random()*360), 30);
+		gp.sprites.add(ch);
+		chocco.add(ch);
+	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
@@ -61,6 +67,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		}
 		if(Math.random() < 0.1){
 			generateCandy();
+		}
+		if(Math.random() < 0.1){
+			generateChocco();
 		}
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
@@ -70,7 +79,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				score += 3000;
+				score += 300;
 			}
 		}
 		Iterator<Candy> c_iter = candy.iterator();
@@ -81,6 +90,16 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!c.isAlive()){
 				c_iter.remove();
 				gp.sprites.remove(c);
+			}
+		}
+		Iterator<Chocco> ch_iter = chocco.iterator();
+		while(ch_iter.hasNext()){
+			Chocco ch = ch_iter.next();
+			ch.proceed();
+			
+			if(!ch.isAlive()){
+				ch_iter.remove();
+				gp.sprites.remove(ch);
 			}
 		}
 		gp.updateGameUI(this);
@@ -99,8 +118,18 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Candy c : candy){
 			cr = c.getRectangle();
 			if(cr.intersects(vr)){
-				score += 5000;
+				score += 500;
 				c.notAlive();
+				return;
+			}
+		}
+
+		Rectangle2D.Double chr;
+		for(Chocco ch : chocco){
+			chr = ch.getRectangle();
+			if(chr.intersects(vr)){
+				score += 1000;
+				ch.notAlive();
 				return;
 			}
 		}

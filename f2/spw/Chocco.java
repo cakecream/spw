@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class Enemy extends Sprite{
+public class Chocco extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
 	
@@ -16,10 +16,10 @@ public class Enemy extends Sprite{
 	private boolean alive = true;
 	BufferedImage image;
 
-	public Enemy(int x, int y) {
-		super(x, y, 40, 40);
+	public Chocco(int x, int y) {
+		super(x, y, 35, 35);
 		try{
-			image = ImageIO.read(new File("f2/image/Enemy.png"));
+			image = ImageIO.read(new File("f2/image/Chocco.png"));
 		}
 		catch(IOException e){
 
@@ -35,7 +35,6 @@ public class Enemy extends Sprite{
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
 		g.drawImage(image, x, y, width, height, null);
-		
 	}
 
 	public void proceed(){
@@ -47,5 +46,9 @@ public class Enemy extends Sprite{
 	
 	public boolean isAlive(){
 		return alive;
+	}
+
+	public void notAlive(){ 
+		alive = false;
 	}
 }
