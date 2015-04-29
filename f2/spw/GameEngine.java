@@ -14,7 +14,8 @@ import javax.swing.Timer;
 public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
-	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<GhostEnemy> ghost = new ArrayList<GhostEnemy>();
 	private ArrayList<Candy> candy = new ArrayList<Candy>();
 	private ArrayList<Chocco> chocco = new ArrayList<Chocco>();
 	private SpaceShip v;	
@@ -23,7 +24,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private long score = 0;
 	private double difficulty = 0.05;
-	
+	private int countchocco = 0;
+
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
 		this.v = v;		
@@ -60,6 +62,11 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(ch);
 		chocco.add(ch);
 	}
+	private void generateGhostEnemy(){
+		GhostEnemy g = new GhostEnemy((int)(Math.random()*360), 30);
+		gp.sprites.add(g);
+		ghost.add(g);
+	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
@@ -68,8 +75,11 @@ public class GameEngine implements KeyListener, GameReporter{
 		if(Math.random() < 0.1){
 			generateCandy();
 		}
-		if(Math.random() < 0.1){
+		if(Math.random() < 0.05){
 			generateChocco();
+		}
+		if(Math.random() < 0.05){
+			generateGhostEnemy();
 		}
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
@@ -79,7 +89,18 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				score += 300;
+				score += 10;
+			}
+		}
+		Iterator<GhostEnemy> g_iter = ghost.iterator();
+		while(g_iter.hasNext()){
+			GhostEnemy g = g_iter.next();
+			g.proceed();
+			
+			if(!g.isAlive()){
+				g_iter.remove();
+				gp.sprites.remove(g);
+				score += 20;
 			}
 		}
 		Iterator<Candy> c_iter = candy.iterator();
@@ -118,7 +139,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Candy c : candy){
 			cr = c.getRectangle();
 			if(cr.intersects(vr)){
-				score += 500;
+				score += 25;
 				c.notAlive();
 				return;
 			}
@@ -128,8 +149,23 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Chocco ch : chocco){
 			chr = ch.getRectangle();
 			if(chr.intersects(vr)){
-				score += 1000;
+				score += 50;
+				countchocco++;
 				ch.notAlive();
+				return;
+			}
+
+			if(countchocco == 15){
+				countchocco=0;
+				score += 1000;
+			}
+		}
+
+		Rectangle2D.Double gr;
+		for(GhostEnemy g : ghost){
+			gr = g.getRectangle();
+			if(gr.intersects(vr)){
+				die();
 				return;
 			}
 		}
@@ -167,6 +203,10 @@ public class GameEngine implements KeyListener, GameReporter{
 		return score;
 	}
 	
+	public int getCountChocco(){
+		return countchocco;
+	}
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		controlVehicle(e);

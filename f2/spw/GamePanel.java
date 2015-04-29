@@ -16,6 +16,7 @@ public class GamePanel extends JPanel {
 	Graphics2D big;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 	BufferedImage image;
+	BufferedImage count;
 
 	public GamePanel() {
 		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
@@ -27,6 +28,13 @@ public class GamePanel extends JPanel {
 		catch(IOException e){
 
 		}
+
+		try{
+			count = ImageIO.read(new File("f2/image/Chocco.png"));
+		}
+		catch(IOException e){
+		
+		}
 	}
 
 	public void updateGameUI(GameReporter reporter){
@@ -34,7 +42,11 @@ public class GamePanel extends JPanel {
 		
 		big.setColor(Color.BLACK);	
 		big.drawImage(image, 0, 0, 400, 600, null);
-		big.drawString(String.format("%04d", reporter.getScore()), 50, 20);
+		big.drawString(String.format("%04d", reporter.getScore()), 20, 20);
+		
+		big.setColor(Color.BLACK);
+		big.drawImage(count, 320, 10, 25, 25, null);
+		big.drawString(String.format("%02d", reporter.getCountChocco()), 350, 20);
 		for(Sprite s : sprites){
 			s.draw(big);
 		}
