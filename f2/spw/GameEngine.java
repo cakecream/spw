@@ -25,6 +25,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	private long score = 0;
 	private double difficulty = 0.05;
 	private int countchocco = 0;
+	private int countcandy = 0;
+	private int bomb = 0;
 
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -140,8 +142,14 @@ public class GameEngine implements KeyListener, GameReporter{
 			cr = c.getRectangle();
 			if(cr.intersects(vr)){
 				score += 25;
+				countcandy++;
 				c.notAlive();
 				return;
+			}
+			if(countcandy == 30){
+				bomb++;
+				countcandy=0;
+				
 			}
 		}
 
@@ -154,7 +162,6 @@ public class GameEngine implements KeyListener, GameReporter{
 				ch.notAlive();
 				return;
 			}
-
 			if(countchocco == 15){
 				countchocco=0;
 				score += 1000;
@@ -205,6 +212,14 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public int getCountChocco(){
 		return countchocco;
+	}
+
+	public int getCountCandy(){
+		return countcandy;
+	}
+	
+	public int getBomb(){
+		return bomb;
 	}
 
 	@Override

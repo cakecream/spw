@@ -4,4 +4,6 @@ public interface GameReporter {
 
 	long getScore();
 	int getCountChocco();
+	int getCountCandy();
+	int getBomb();
 }

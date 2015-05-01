@@ -17,7 +17,7 @@ public class Candy extends Sprite{
 	BufferedImage image;
 
 	public Candy(int x, int y) {
-		super(x, y, 35, 35);
+		super(x, y, 35, 25);
 		try{
 			image = ImageIO.read(new File("f2/image/Candy.png"));
 		}

@@ -16,8 +16,10 @@ public class GamePanel extends JPanel {
 	Graphics2D big;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 	BufferedImage image;
-	BufferedImage count;
-
+	BufferedImage countchocco;
+	BufferedImage countcandy;
+	BufferedImage bomb;
+	
 	public GamePanel() {
 		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
@@ -30,7 +32,21 @@ public class GamePanel extends JPanel {
 		}
 
 		try{
-			count = ImageIO.read(new File("f2/image/Chocco.png"));
+			countchocco = ImageIO.read(new File("f2/image/Chocco.png"));
+		}
+		catch(IOException e){
+		
+		}
+
+		try{
+			countcandy = ImageIO.read(new File("f2/image/Candy.png"));
+		}
+		catch(IOException e){
+		
+		}
+
+		try{
+			bomb = ImageIO.read(new File("f2/image/Bomb.png"));
 		}
 		catch(IOException e){
 		
@@ -45,8 +61,16 @@ public class GamePanel extends JPanel {
 		big.drawString(String.format("%04d", reporter.getScore()), 20, 20);
 		
 		big.setColor(Color.BLACK);
-		big.drawImage(count, 320, 10, 25, 25, null);
-		big.drawString(String.format("%02d", reporter.getCountChocco()), 350, 20);
+		big.drawImage(countchocco, 320, 50, 25, 25, null);
+		big.drawString(String.format("%02d", reporter.getCountChocco()), 350, 60);
+
+		big.setColor(Color.BLACK);
+		big.drawImage(countcandy, 250, 15, 30, 20, null);
+		big.drawString(String.format("%02d", reporter.getCountCandy()), 290, 30);
+
+		big.setColor(Color.BLACK);
+		big.drawImage(bomb, 310, 5, 35, 35, null);
+		big.drawString(String.format("%02d", reporter.getBomb()), 350, 30);
 		for(Sprite s : sprites){
 			s.draw(big);
 		}
