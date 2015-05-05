@@ -18,6 +18,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<GhostEnemy> ghost = new ArrayList<GhostEnemy>();
 	private ArrayList<Candy> candy = new ArrayList<Candy>();
 	private ArrayList<Chocco> chocco = new ArrayList<Chocco>();
+	private ArrayList<AtomicBomb> atomicbomb = new ArrayList<AtomicBomb>();
 	private SpaceShip v;	
 	
 	private Timer timer;
@@ -68,6 +69,11 @@ public class GameEngine implements KeyListener, GameReporter{
 		GhostEnemy g = new GhostEnemy((int)(Math.random()*360), 30);
 		gp.sprites.add(g);
 		ghost.add(g);
+	}
+	private void generateAtomicBomb(){
+		AtomicBomb ab = new AtomicBomb(-100, -10);
+		gp.sprites.add(ab);
+		atomicbomb.add(ab);
 	}
 	
 	private void process(){
@@ -125,12 +131,30 @@ public class GameEngine implements KeyListener, GameReporter{
 				gp.sprites.remove(ch);
 			}
 		}
+		Iterator<AtomicBomb> ab_iter = atomicbomb.iterator();
+		while(ab_iter.hasNext()){
+			AtomicBomb ab = ab_iter.next();
+			ab.proceed();
+			
+			if(!ab.isAlive()){
+				ab_iter.remove();
+				gp.sprites.remove(ab);
+			}
+		}
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
+		Rectangle2D.Double abr;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
+			for(AtomicBomb ab : atomicbomb){
+				abr = ab.getRectangle();
+				if(abr.intersects(er)){
+					score += 100;
+					e.notAlive();
+				}
+			}	
 			if(er.intersects(vr)){
 				die();
 				return;
@@ -146,7 +170,7 @@ public class GameEngine implements KeyListener, GameReporter{
 				c.notAlive();
 				return;
 			}
-			if(countcandy == 30){
+			if(countcandy == 15){
 				bomb++;
 				countcandy=0;
 				
@@ -171,6 +195,13 @@ public class GameEngine implements KeyListener, GameReporter{
 		Rectangle2D.Double gr;
 		for(GhostEnemy g : ghost){
 			gr = g.getRectangle();
+			for(AtomicBomb ab : atomicbomb){
+				abr = ab.getRectangle();
+				if(abr.intersects(gr)){
+					score += 100;
+					g.notAlive();
+				}
+			}
 			if(gr.intersects(vr)){
 				die();
 				return;
@@ -202,6 +233,12 @@ public class GameEngine implements KeyListener, GameReporter{
 			break;
 		case KeyEvent.VK_R:
 			score = 0;
+			break;
+		case KeyEvent.VK_SPACE:
+			if(bomb>0){
+				generateAtomicBomb();
+				bomb--;
+			}
 			break;
 		}
 	}

@@ -8,18 +8,18 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class Enemy extends Sprite{
-	public static final int Y_TO_FADE = 400;
-	public static final int Y_TO_DIE = 600;
+public class AtomicBomb extends Sprite{
+	public static final int Y_TO_FADE = 200;
+	public static final int Y_TO_DIE = -30;
 	
 	private int step = 12;
 	private boolean alive = true;
 	BufferedImage image;
 
-	public Enemy(int x, int y) {
-		super(x, y, 40, 40);
+	public AtomicBomb(int x, int y) {
+		super(x, y, 600, 600);
 		try{
-			image = ImageIO.read(new File("f2/image/Enemy.png"));
+			image = ImageIO.read(new File("f2/image/AtomicBomb.png"));
 		}
 		catch(IOException e){
 
@@ -39,17 +39,13 @@ public class Enemy extends Sprite{
 	}
 
 	public void proceed(){
-		y += step;
-		if(y > Y_TO_DIE){
+		y -= step;
+		if(y < Y_TO_DIE){
 			alive = false;
 		}
 	}
 	
 	public boolean isAlive(){
 		return alive;
-	}
-	
-	public void notAlive(){
-		alive = false;
 	}
 }

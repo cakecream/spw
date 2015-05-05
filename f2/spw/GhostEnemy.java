@@ -48,4 +48,8 @@ public class GhostEnemy extends Sprite{
 	public boolean isAlive(){
 		return alive;
 	}
+
+	public void notAlive(){
+		alive = false;
+	}
 }
