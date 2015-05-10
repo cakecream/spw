@@ -28,6 +28,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private int countchocco = 0;
 	private int countcandy = 0;
 	private int bomb = 0;
+	private int heart = 3;
 
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -156,7 +157,12 @@ public class GameEngine implements KeyListener, GameReporter{
 				}
 			}	
 			if(er.intersects(vr)){
-				die();
+				if(heart>0){
+					heart--;
+					e.notAlive();
+				}
+				else 
+					die();
 				return;
 			}
 		}
@@ -203,7 +209,12 @@ public class GameEngine implements KeyListener, GameReporter{
 				}
 			}
 			if(gr.intersects(vr)){
-				die();
+				if(heart>0){
+					g.notAlive();
+					heart--;
+				}
+				else
+					die();
 				return;
 			}
 		}
@@ -257,6 +268,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public int getBomb(){
 		return bomb;
+	}
+
+	public int getHeart(){
+		return heart;
 	}
 
 	@Override

@@ -6,4 +6,5 @@ public interface GameReporter {
 	int getCountChocco();
 	int getCountCandy();
 	int getBomb();
+	int getHeart();
 }

@@ -19,6 +19,7 @@ public class GamePanel extends JPanel {
 	BufferedImage countchocco;
 	BufferedImage countcandy;
 	BufferedImage bomb;
+	BufferedImage heart;
 	
 	public GamePanel() {
 		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
@@ -51,13 +52,20 @@ public class GamePanel extends JPanel {
 		catch(IOException e){
 		
 		}
+
+		try{
+			heart = ImageIO.read(new File("f2/image/Heart.png"));
+		}
+		catch(IOException e){
+		
+		}
 	}
 
 	public void updateGameUI(GameReporter reporter){
 		big.clearRect(0, 0, 400, 600);
+		big.drawImage(image, 0, 0, 400, 600, null);
 		
 		big.setColor(Color.BLACK);	
-		big.drawImage(image, 0, 0, 400, 600, null);
 		big.drawString(String.format("%04d", reporter.getScore()), 20, 20);
 		
 		big.setColor(Color.BLACK);
@@ -71,6 +79,12 @@ public class GamePanel extends JPanel {
 		big.setColor(Color.BLACK);
 		big.drawImage(bomb, 310, 5, 35, 35, null);
 		big.drawString(String.format("%02d", reporter.getBomb()), 350, 30);
+
+
+		big.setColor(Color.BLACK);
+		big.drawImage(heart, 20, 35, 25, 20, null);
+		big.drawString(String.format("%02d", reporter.getHeart()), 50, 55);
+
 		for(Sprite s : sprites){
 			s.draw(big);
 		}
